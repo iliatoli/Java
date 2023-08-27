@@ -1,0 +1,74 @@
+package project1;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class BankBalanceApp {
+    private double balance = 0.0;
+    private JTextField balanceField;
+
+    public BankBalanceApp() {
+        JFrame frame = new JFrame("Bank Balance Application");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(300, 200);
+
+        JPanel panel = new JPanel();
+        frame.add(panel);
+
+        JLabel label = new JLabel("Bank Account Balance:");
+        panel.add(label);
+
+        balanceField = new JTextField(10);
+        balanceField.setEditable(false);
+        panel.add(balanceField);
+
+        JButton depositButton = new JButton("Deposit");
+        JButton withdrawButton = new JButton("Withdraw");
+
+        panel.add(depositButton);
+        panel.add(withdrawButton);
+
+        depositButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String input = JOptionPane.showInputDialog(frame, "Enter deposit amount:");
+                if (input != null) {
+                    double depositAmount = Double.parseDouble(input);
+                    balance += depositAmount;
+                    updateBalanceField();
+                }
+            }
+        });
+
+        withdrawButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String input = JOptionPane.showInputDialog(frame, "Enter withdrawal amount:");
+                if (input != null) {
+                    double withdrawalAmount = Double.parseDouble(input);
+                    if (withdrawalAmount <= balance) {
+                        balance -= withdrawalAmount;
+                        updateBalanceField();
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Insufficient funds!");
+                    }
+                }
+            }
+        });
+
+        frame.setVisible(true);
+    }
+
+    private void updateBalanceField() {
+        balanceField.setText(String.format("%.2f", balance));
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new BankBalanceApp();
+            }
+        });
+    }
+}
